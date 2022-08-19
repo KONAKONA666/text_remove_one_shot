@@ -13,6 +13,6 @@ COPY --chown=konakona:konakona . /home/konakona/src
 USER konakona
 RUN cd /home/konakona/src \
     && python3.9 -m pip install --upgrade pip \
-    && python3.9 -m pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116 scipy numpy kornia scikit-image matplotlib torchsummary tensorboard
+    && python3.9 -m pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116 scipy numpy kornia scikit-image matplotlib torchsummary tensorboard opencv-python
 
 WORKDIR /home/konakona/src
