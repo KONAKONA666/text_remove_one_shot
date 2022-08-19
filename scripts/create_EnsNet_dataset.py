@@ -11,6 +11,9 @@ import json
 import math
 import glob
 
+import argparse
+
+
 json.encoder.FLOAT_REPR = lambda o: format(o, '.2f')
 random.seed(9001)
 
@@ -42,7 +45,7 @@ class TextMaskData():
             self.charBB = np.expand_dims(self.charBB, axis=-1)
 
     def _get_img_dir(self):
-        adir = os.path.join(self.img_dir, self.imname + '.jpg')
+        adir = os.path.join(self.img_dir, self.imname + '.png')
         if os.path.exists(adir):
             return adir
         else:
@@ -52,8 +55,8 @@ class TextMaskData():
 
     def _get_bgimg_dir(self):
         # Todo: change the code for bgimg
-        if os.path.exists(os.path.join(self.bgimg_dir, self.imname + '.jpg')):
-            return os.path.join(self.bgimg_dir, self.imname + '.jpg')
+        if os.path.exists(os.path.join(self.bgimg_dir, self.imname + '.png')):
+            return os.path.join(self.bgimg_dir, self.imname + '.png')
         else:
             print("background image%s does not exist." % (self.imname))
             self.isValid = False
@@ -109,14 +112,29 @@ class TextMaskData():
 def convert_dataset():
     """Convert dataset"""
 
-    IMG_DIR = '/media/osman/megamind/SynthText/EnsNet_dataset/real/jpg/img'
-    BG_IMG_DIR = '/media/osman/megamind/SynthText/EnsNet_dataset/real/jpg/label'
-    BBOX_DIR = '/media/osman/megamind/SynthText/EnsNet_dataset/real/bbox'
-    DATASET_DIR = './output'
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-v', type=bool, default=False, help='val ?')
+
+    args = parser.parse_args()
+
+    if args.v:
+        IMG_DIR = r'/home/konakona/dataset/syn_test/img'
+        BG_IMG_DIR = r'/home/konakona/dataset/syn_test/label'
+        BBOX_DIR = r'/home/konakona/dataset/syn_test/bbox'
+        DATASET_DIR = './output'
+        SAVE_JSON = 'output_val.json'
+    else:
+        IMG_DIR = r'/home/konakona/dataset/syn_train/img'
+        BG_IMG_DIR = r'/home/konakona/dataset/syn_train/label'
+        BBOX_DIR = r'/home/konakona/dataset/syn_train/bbox'
+        DATASET_DIR = './output'
+        SAVE_JSON = 'output.json'
+        
     if not os.path.exists(DATASET_DIR):
         os.mkdir(DATASET_DIR)
 
-    all_files = glob.glob(IMG_DIR + '/*.jpg')
+    all_files = glob.glob(IMG_DIR + '/*.png')
     print("Total %d files are found" % (len(all_files)))
     data = []
     for item in all_files:
@@ -131,11 +149,12 @@ def convert_dataset():
         # print(super_boxes.shape)
         if len(super_boxes.shape)==3:
             super_boxes = np.transpose(super_boxes, [1, 2, 0])
+        #print(img_name, super_boxes)
         item = TextMaskData(IMG_DIR, BG_IMG_DIR, img_name, np.array([]), np.array(super_boxes))
         if item.isValid:
             data.append(item)
 
-    with open(os.path.join(DATASET_DIR, 'output.json'), 'w') as f:
+    with open(os.path.join(DATASET_DIR, SAVE_JSON), 'w') as f:
         output = []
         for item in data:
             output.append(item.get_info())

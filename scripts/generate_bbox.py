@@ -2,10 +2,9 @@ import glob2
 import os
 import cv2
 import numpy as np
-from skimage.measure import compare_ssim
 import imutils
 
-input_dir =  './syn_train'
+input_dir =  r'C:\Users\Aybek\logo_gen\dataset\syn_test'
 output_dir = os.path.join(input_dir, 'bbox')
 
 if not os.path.exists(output_dir):

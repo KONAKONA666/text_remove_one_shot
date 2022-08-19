@@ -81,7 +81,7 @@ def imshow(img, title=''):
     plt.show()
 
 def imread(path):
-    im = Image.open(path)
+    im = Image.open(path).convert("RGB")
     return np.array(im)
 
 def imsave(img, path):

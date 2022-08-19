@@ -195,7 +195,7 @@ def set_model_log_output_dir(config):
     log_dir = os.path.join(*[os.path.expanduser(output_dir), subdir, 'log'])
     model_dir = os.path.join(*[os.path.expanduser(output_dir), subdir, 'model'])
     test_dir = os.path.join(*[os.path.expanduser(output_dir), subdir, 'test'])
-
+    print(log_dir)
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
 

@@ -8,7 +8,7 @@ from .models import MaskInpaintModel
 from .utils import Progbar, create_dir, stitch_images, imsave, output_align
 from .metrics import PSNR, EdgeAccuracy
 import torchvision.utils as vutils
-from kornia.losses import SSIM
+from kornia.losses import SSIMLoss as SSIM
 from kornia.filters import GaussianBlur2d
 
 class MRTR():
@@ -73,8 +73,10 @@ class MRTR():
                 self.maskpreinpaint_model.train()
                 images, images_gt, masks, masks_gt, masks_refine_gt = self.get_inputs(items)
                 # train
+
                 prob = np.minimum(self.config.MASK_SWITCH_RATIO, np.ceil(iteration/self.config.MASK_SWITCH_STEP)/10)
                 use_gt_mask = False if np.random.binomial(1, prob) else True
+                print(images.shape)
                 images_gen, pre_images_gen, masks_gen, gen_loss, dis_loss, logs = \
                     self.maskpreinpaint_model.process(images, images_gt, masks, masks_gt, masks_refine_gt,
                                                       use_gt_mask=use_gt_mask)

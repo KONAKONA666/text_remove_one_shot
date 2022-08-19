@@ -52,8 +52,8 @@ class Dataset(torch.utils.data.Dataset):
         # item = self.load_item(index)
         try:
             # item = self.load_item(index)
-            # item = self.load_item_SCUT(index)
-            item = self.load_item_raindrop(index)
+            item = self.load_item_SCUT(index)
+            #item = self.load_item_raindrop(index)
             self.backup_item = item
         except (KeyboardInterrupt, SystemExit):
             raise
@@ -208,7 +208,7 @@ class Dataset(torch.utils.data.Dataset):
         size = self.input_size
 
         # load image
-        img = imread(self.data[index]['dir'])
+        img = imread(self.data[index]['dir'],  mode='RGB')
         if os.path.exists(self.data[index]['gt_dir']):
             img_gt = imread(self.data[index]['gt_dir'])
         else:
@@ -254,7 +254,7 @@ class Dataset(torch.utils.data.Dataset):
             img_gt = imread(self.data[index]['gt_dir'])
         else:
             img_gt = imread(self.data[index]['gt_dir'].split(".")[0] + '.png', mode='RGB')
-
+       
         # gray to rgb
         if len(img.shape) < 3:
             img = gray2rgb(img)
@@ -287,6 +287,7 @@ class Dataset(torch.utils.data.Dataset):
                                      self.mask_threshold).astype(np.uint8)
 
         masks_gt = masks_refine_gt
+       
         return self.to_tensor(img), self.to_tensor(img_gt), \
                self.to_tensor(masks_pad.astype(np.float64)), self.to_tensor(masks_gt.astype(np.float64)), \
                self.to_tensor(masks_refine_gt.astype(np.float64))
@@ -440,11 +441,14 @@ class Dataset(torch.utils.data.Dataset):
     #     return []
 
     def load_data(self, afile, theta=0):
+        
         with open(afile) as f:
             data = json.load(f)
             if theta>0:
                 name, subfix = os.path.basename(afile).split(".")
+                
                 file_path = '%s/%s_%s.%s' % (os.path.dirname(afile), name, str(theta), subfix)
+                print(file_path)
                 if os.path.exists(file_path):
                     print('%s is used' % (file_path))
                     with open(file_path, 'r') as f:

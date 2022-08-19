@@ -10,12 +10,14 @@ import skimage.io
 import json
 import math
 
+
+
 json.encoder.FLOAT_REPR = lambda o: format(o, '.2f')
 random.seed(9001)
 
 import sys
 sys.path.append('../src')
-from utils import mask_generation_with_BB
+from src.utils import mask_generation_with_BB
 
 class TextMaskData():
     def __init__(self, IMG_DIR, BG_DIR, name, charBB, wordBB):

@@ -7,15 +7,17 @@ GPU: [0]            # list of gpu ids
 DEBUG: 0            # turns on debugging mode
 VERBOSE: 1          # turns on verbose mode in the output console
 
-OUTPUT_DIR : /media/osman/megamind/text_removal_gan_training/OSMTRNET
+OUTPUT_DIR: /home/konakona/src/training
+LOG_DIR: /home/konakona/src/training/logging
+MODEL_DIR: /home/konakona/src/training/models
 
 G1_MODEL_PATH: null
 D1_MODEL_PATH: null
 
 # EnsNet
-TRAIN_DATA: /media/osman/megamind/SynthText/EnsNet_dataset/json_based/real_syn_train.json
-VAL_DATA: /media/osman/megamind/SynthText/EnsNet_dataset/json_based/real_syn_validation.json
-TEST_DATA: /media/osman/megamind/SynthText/EnsNet_dataset/json_based/EnsNet_syn_test.json
+TRAIN_DATA: /home/konakona/src/scripts/output/output.json
+VAL_DATA: /home/konakona/src/scripts/output/output_val.json
+TEST_DATA: /home/konakona/src/scripts/output/output_val.json
 
 PRINT_AT_STEP: 10
 SAVE_SCALR_AT_STEP: 10     # Summary at step
@@ -23,10 +25,13 @@ SAVE_IMAGE_AT_STEP: 100     # Summary at step
 SAVE_MODEL_AT_STEP: 2000
 SAVE_HIST_AT_STEP: 100
 
-WORD_BB_PERCENT_THRESHOLD : 0   # Word mask percentage in a mask image if
-CHAR_BB_PERCENT_THRESHOLD : 0  # Character mask percentage in a mask image if
+WORD_BB_PERCENT_THRESHOLD : 1   # Word mask percentage in a mask image if
+CHAR_BB_PERCENT_THRESHOLD : 1  # Character mask percentage in a mask image if
+MASK_SWITCH_RATIO: 0.5
+MASK_SWITCH_STEP: 10
+MASK_REFINE_LOSS_WEIGHT: 0.2
 
-BATCH_SIZE: 8               # input batch size for training
+BATCH_SIZE: 2               # input batch size for training
 INPUT_SIZE: 256               # input image size for training 0 for original size
 
 LR: 0.0001                  # learning rate
